@@ -12,4 +12,9 @@ export class OrderRepository implements IOrderRepository {
   async findAll(): Promise<Order[]> {
     return await OrderDB.find();
   }
+
+  async delete(id: string): Promise<string> {
+     await OrderDB.findByIdAndDelete(id);
+     return "Order Deleted";
+  }
 }

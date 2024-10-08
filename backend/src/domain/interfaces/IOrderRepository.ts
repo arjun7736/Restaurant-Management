@@ -4,4 +4,5 @@ import { Order } from "../entities/order";
 export interface IOrderRepository{
     create(data:IOrder):Promise<string>
     findAll():Promise<Order[]>
+    delete(id:string):Promise<string|null>
 }
