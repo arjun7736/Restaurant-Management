@@ -5,4 +5,5 @@ export interface IOrderRepository{
     create(data:IOrder):Promise<string>
     findAll():Promise<Order[]>
     delete(id:string):Promise<string|null>
+    updateOrder(id:string,data:IOrder):Promise<string>
 }

@@ -2,12 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import { AddOrder } from "../../application/useCases/addOrder";
 import { GetOrders } from "../../application/useCases/getOrders";
 import { DeleteOrder } from "../../application/useCases/deleteOrder";
+import { UpdateOrder } from "../../application/useCases/updateOrder";
 
 export class OrderController {
   constructor(
     private addOrder: AddOrder,
     private getOrder: GetOrders,
-    private deleteOrd: DeleteOrder
+    private deleteOrd: DeleteOrder,
+    private update: UpdateOrder
   ) {}
 
   async createOrder(req: Request, res: Response, next: NextFunction) {
@@ -33,6 +35,16 @@ export class OrderController {
       const { id } = req.params;
       const orders = await this.deleteOrd.execute(id);
       res.json(orders);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateOrder(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const update = await this.update.execute(id, req.body);
+      res.json(update)
     } catch (error) {
       next(error);
     }

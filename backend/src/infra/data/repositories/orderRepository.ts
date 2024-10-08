@@ -17,4 +17,9 @@ export class OrderRepository implements IOrderRepository {
      await OrderDB.findByIdAndDelete(id);
      return "Order Deleted";
   }
+
+  async updateOrder(id: string, data: IOrder): Promise<string> {
+      await OrderDB.findByIdAndUpdate(id, data);
+      return "Order Updated";
+  }
 }
