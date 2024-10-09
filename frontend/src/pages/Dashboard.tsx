@@ -1,19 +1,35 @@
 import NavBar from "@/components/NavBar";
 import SideBar from "@/components/SideBar";
 import { Button } from "@/components/ui/button";
-import { Calendar, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 import { Card } from "@/components/ui/card";
 import OrderListTable from "@/components/OrderListTable";
+import { FaCalendarAlt } from "react-icons/fa";
+import { fetchOrderList, Order } from "@/apis/apis";
+import PieChart from "@/components/PieChart";
+import LineChart from "@/components/LineChart";
+import RevenueChart from "@/components/RevenueChart";
 
 const Dashboard = () => {
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
-  
+  const [orderList, setOrderList] = useState<Order[]>([]);
+  const fetchData = async () => {
+    const data = await fetchOrderList();
+    setOrderList(data);
+  };
+
+  const amound = orderList
+    ?.filter((val) => val.status == "delivered")
+    .reduce((acc, val) => (acc += val.price), 0);
+
+const totalDelivered =orderList.filter((val) => val.status == "delivered").length
   return (
     <div className="flex ">
       <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />
@@ -33,13 +49,34 @@ const Dashboard = () => {
                 Hi Arjun Welcome Back to Foodko Admin
               </p>
             </div>
-            <Card className="flex items-center justify-center">
-              <div className="flex w-8 h-8 bg-blue-200 items-center justify-center rounded-xl">
-                <Calendar height={18} />
-              </div>
-              <div>
-                <p>Filter Period</p>
-                <p>17 April 2024 - 31 Dec 2024</p>
+
+            <Card className="items-center justify-center hidden md:flex">
+              <div className="flex items-center bg-white p-4 rounded-lg shadow-md max-w-sm">
+                <div className="bg-blue-100 rounded-full p-2">
+                  <FaCalendarAlt className="text-blue-500" size={24} />
+                </div>
+                <div className="ml-4">
+                  <p className="text-gray-500 font-semibold">Filter Period</p>
+                  <p className="text-gray-600 text-sm">
+                    17 April 2020 - 21 May 2020
+                  </p>
+                </div>
+                <div className="ml-auto text-gray-400">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </div>
               </div>
             </Card>
           </div>
@@ -47,53 +84,39 @@ const Dashboard = () => {
           <section className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
             <div className="bg-white p-4 rounded-lg shadow">
               <h3 className="text-gray-600">Total Orders</h3>
-              <p className="text-3xl font-bold">75</p>
+              <p className="text-3xl font-bold">{orderList.length}</p>
             </div>
             <div className="bg-white p-4 rounded-lg shadow">
               <h3 className="text-gray-600">Total Delivered</h3>
-              <p className="text-3xl font-bold">357</p>
+              <p className="text-3xl font-bold">
+                {totalDelivered}
+              </p>
             </div>
             <div className="bg-white p-4 rounded-lg shadow">
               <h3 className="text-gray-600">Total Canceled</h3>
-              <p className="text-3xl font-bold">65</p>
+              <p className="text-3xl font-bold">
+                {orderList.filter((val) => val.status == "cancelled").length}
+              </p>
             </div>
             <div className="bg-white p-4 rounded-lg shadow">
               <h3 className="text-gray-600">Total Revenue</h3>
-              <p className="text-3xl font-bold">$128</p>
+              <p className="text-3xl font-bold">₹ {amound}</p>
             </div>
           </section>
 
-          {/* Charts and Reports Section */}
           <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <div className="bg-white p-4 rounded-lg shadow">
-              <h3 className="text-gray-600 mb-4">Pie Chart</h3>
-              {/* Placeholder for pie chart */}
-              <div className="flex justify-center items-center h-48rounded-lg">
-                hi there
-              </div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow">
-              <h3 className="text-gray-600 mb-4">Chart Order</h3>
-              {/* Placeholder for line chart */}
-              <div className="flex justify-center items-center h-48 bg-gray-200 rounded-lg">
-                Line Chart Component
-              </div>
-            </div>
+            <PieChart orderList={orderList}/>
+            <LineChart orderList={orderList}/>
           </section>
 
-          {/* Total Revenue and Order List Section */}
           <section className="grid grid-cols-1 gap-6">
             <div className="bg-white p-4 rounded-lg shadow mb-6">
               <h3 className="text-gray-600 mb-4">Total Revenue</h3>
-              {/* Placeholder for revenue chart */}
               <div className="flex justify-center items-center h-48 bg-gray-200 rounded-lg">
-                Revenue Chart Component
+                <RevenueChart orderList={orderList} />
               </div>
             </div>
-
-            <OrderListTable/>
-
-
+            <OrderListTable orderList={orderList} fetchData={fetchData} />
           </section>
         </div>
       </div>

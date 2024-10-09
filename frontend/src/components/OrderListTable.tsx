@@ -26,6 +26,7 @@ import { Button } from "./ui/button";
 import { MdOutlinePlaylistAdd } from "react-icons/md";
 import AddOrder from "./AddOrder";
 import EditOrder from "./EditOrder";
+import { ArrowUpDown } from "lucide-react";
 
 const OrderListTable = ({
   orderList,
@@ -35,23 +36,52 @@ const OrderListTable = ({
   fetchData: () => void;
 }) => {
 
+  const [sortCriteria, setSortCriteria] = useState<"name" | "price">("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
   const handleDelete = async (id: string) => {
     await deleteOrder(id);
     await fetchData();
   };
+
   useEffect(() => {
     fetchData();
   }, []);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [id, setId] = useState("");
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
   const fetchId = async (id: string) => {
     setEditOpen(!isEditOpen);
     setId(id);
   };
+
+  const sortedOrderList = [...orderList].sort((a, b) => {
+    let comparison = 0;
+
+    if (sortCriteria === "price") {
+      comparison = a.price - b.price;
+    } else if (sortCriteria === "name") {
+      comparison = a.name.localeCompare(b.name);
+    }
+
+    return sortOrder === "asc" ? comparison : -comparison;
+  });
+
+  const handleSort = (criteria: "name" | "price") => {
+    if (sortCriteria === criteria) {
+      setSortOrder(prev => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortCriteria(criteria);
+      setSortOrder("asc");
+    }
+  };
+
   return (
     <>
       <div className="bg-white p-4 rounded-lg shadow">
@@ -65,7 +95,7 @@ const OrderListTable = ({
             <MdOutlinePlaylistAdd size={20} className="mr-1" /> Add Order
           </Button>
         </div>
-        {orderList.length == 0 ? (
+        {orderList.length === 0 ? (
           <div className="flex items-center justify-center">
             No Orders Available
           </div>
@@ -74,18 +104,34 @@ const OrderListTable = ({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Product</TableHead>
-                  <TableHead>Price</TableHead>
+                  <TableHead className="flex gap-3">
+                    Date 
+                  </TableHead>
+                  <TableHead>
+                    Order ID
+                  </TableHead>
+                  <TableHead>
+                    <button onClick={() => handleSort("name")} className="flex items-center">
+                      Customer <ArrowUpDown size={18} />
+                    </button>
+                  </TableHead>
+                  <TableHead>
+                    <button onClick={() => handleSort("name")} className="flex items-center">
+                      Product <ArrowUpDown size={18} />
+                    </button>
+                  </TableHead>
+                  <TableHead className="flex gap-3">
+                    <button onClick={() => handleSort("price")} className="flex items-center">
+                      Price <ArrowUpDown size={18} />
+                    </button>
+                  </TableHead>
                   <TableHead>Quantity</TableHead>
                   <TableHead>Location</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {orderList.map((order) => {
+                {sortedOrderList.map((order) => {
                   const orderDate = new Date(order?.date);
                   const formattedDate = isNaN(orderDate.getTime())
                     ? "Invalid Date"
@@ -115,17 +161,15 @@ const OrderListTable = ({
                       </TableCell>
                       <AlertDialog>
                         <TableCell>
-                          {" "}
                           <FaRegEdit
                             size={20}
                             className="hover:cursor-pointer"
                             onClick={() => fetchId(order._id)}
-                          />{" "}
+                          />
                         </TableCell>
                         <TableCell>
                           <AlertDialogTrigger>
-                            {" "}
-                            <RiDeleteBin5Line size={20} />{" "}
+                            <RiDeleteBin5Line size={20} />
                           </AlertDialogTrigger>
                         </TableCell>
                         <AlertDialogContent>
