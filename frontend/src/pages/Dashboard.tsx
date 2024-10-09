@@ -1,9 +1,11 @@
 import NavBar from "@/components/NavBar";
 import SideBar from "@/components/SideBar";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Calendar, Menu, X } from "lucide-react";
 import { useState } from "react";
+
+import { Card } from "@/components/ui/card";
+import OrderListTable from "@/components/OrderListTable";
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +13,7 @@ const Dashboard = () => {
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
-
+  
   return (
     <div className="flex ">
       <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />
@@ -66,8 +68,8 @@ const Dashboard = () => {
             <div className="bg-white p-4 rounded-lg shadow">
               <h3 className="text-gray-600 mb-4">Pie Chart</h3>
               {/* Placeholder for pie chart */}
-              <div className="flex justify-center items-center h-48 bg-gray-200 rounded-lg">
-                Pie Chart Component
+              <div className="flex justify-center items-center h-48rounded-lg">
+                hi there
               </div>
             </div>
             <div className="bg-white p-4 rounded-lg shadow">
@@ -89,31 +91,9 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-lg shadow">
-              <h3 className="text-gray-600 mb-4">Order List</h3>
-              <table className="w-full table-auto text-left">
-                <thead>
-                  <tr className="text-gray-500">
-                    <th className="py-2">Date</th>
-                    <th className="py-2">Order ID</th>
-                    <th className="py-2">Customer</th>
-                    <th className="py-2">Product</th>
-                    <th className="py-2">Price</th>
-                    <th className="py-2">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="py-2">23/08/24</td>
-                    <td className="py-2">#975121</td>
-                    <td className="py-2">John Doe</td>
-                    <td className="py-2">Pizza</td>
-                    <td className="py-2">$20</td>
-                    <td className="py-2 text-green-500">Delivered</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <OrderListTable/>
+
+
           </section>
         </div>
       </div>
