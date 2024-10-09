@@ -4,55 +4,58 @@ import { Order } from "@/apis/apis";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
-
-const PieChart = ({orderList}:{orderList:Order[]}) => {
-    const totalDelivered =orderList?.filter((val) => val.status == "delivered").length
-    const totalOrder =orderList?.length
-    const totalCancelled =orderList?.filter((val) => val.status == "cancelled").length
-    const totalRevenue =orderList
+const PieChart = ({ orderList }: { orderList: Order[] }) => {
+  const totalDelivered = orderList?.filter(
+    (val) => val.status == "delivered"
+  ).length;
+  const totalOrder = orderList?.length;
+  const totalCancelled = orderList?.filter(
+    (val) => val.status == "cancelled"
+  ).length;
+  const totalRevenue = orderList
     ?.filter((val) => val.status == "delivered")
     .reduce((acc, val) => (acc += val.price), 0);
-const approxRevenue = orderList.reduce((acc, val) => (acc += val.price), 0);
-    const data1 = {
-        labels: ["Total Delivered","Total Orders"],
-        datasets: [
-          {
-            data: [totalDelivered,totalOrder],
-            backgroundColor: ["#FF6384","#E0E0E0" ],
-            hoverBackgroundColor: ["#FF6384","#D0D0D0"],
-          },
-        ],
-      };
-      
-      const data2 = {
-        labels: ["Total Canceled"],
-        datasets: [
-          {
-            data: [totalCancelled,totalOrder],
-            backgroundColor: ["#4BC0C0", "#9966FF"],
-            hoverBackgroundColor: ["#4BC0C0", "#9966FF"],
-          },
-        ],
-      };
-      
-      const data3 = {
-        labels: ["Total Revenue","Approx Revenue"],
-        datasets: [
-          {
-            data: [totalRevenue,approxRevenue],
-            backgroundColor: ["#FF6384", "#C9CBCF"],
-            hoverBackgroundColor: ["#FF6384", "#C9CBCF"],
-          },
-        ],
-      };
-      const options = {
-        plugins: {
-          legend: {
-            display: false,
-          },
-        },
-        cutout: "70%", 
-      };
+  const approxRevenue = orderList.reduce((acc, val) => (acc += val.price), 0);
+  const data1 = {
+    labels: ["Total Delivered", "Total Orders"],
+    datasets: [
+      {
+        data: [totalDelivered, totalOrder],
+        backgroundColor: ["#FF6384", "#E0E0E0"],
+        hoverBackgroundColor: ["#FF6384", "#D0D0D0"],
+      },
+    ],
+  };
+
+  const data2 = {
+    labels: ["Total Canceled","Total Orders"],
+    datasets: [
+      {
+        data: [totalCancelled, totalOrder],
+        backgroundColor: ["#4BC0C0", "#9966FF"],
+        hoverBackgroundColor: ["#4BC0C0", "#9966FF"],
+      },
+    ],
+  };
+
+  const data3 = {
+    labels: ["Total Revenue", "Approx Revenue"],
+    datasets: [
+      {
+        data: [totalRevenue, approxRevenue],
+        backgroundColor: ["#FF6384", "#C9CBCF"],
+        hoverBackgroundColor: ["#FF6384", "#C9CBCF"],
+      },
+    ],
+  };
+  const options = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+    cutout: "70%",
+  };
   return (
     <>
       <div className="bg-white p-4 rounded-lg shadow">
@@ -68,7 +71,6 @@ const approxRevenue = orderList.reduce((acc, val) => (acc += val.price), 0);
             <Doughnut data={data3} options={options} />
           </div>
         </div>
-        
       </div>
     </>
   );

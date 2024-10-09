@@ -1,4 +1,4 @@
-import { deleteOrder, fetchOrderList, Order } from "@/apis/apis";
+import { deleteOrder, Order } from "@/apis/apis";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -27,13 +27,14 @@ import { MdOutlinePlaylistAdd } from "react-icons/md";
 import AddOrder from "./AddOrder";
 import EditOrder from "./EditOrder";
 
-const OrderListTable = () => {
-  const [orderList, setOrderList] = useState<Order[]>([]);
+const OrderListTable = ({
+  orderList,
+  fetchData,
+}: {
+  orderList: Order[];
+  fetchData: () => void;
+}) => {
 
-  const fetchData = async () => {
-    const data = await fetchOrderList();
-    setOrderList(data);
-  };
   const handleDelete = async (id: string) => {
     await deleteOrder(id);
     await fetchData();
