@@ -12,7 +12,7 @@ const port:string | undefined = process.env.PORT;
 const mongo:string| undefined = process.env.MONGO;
 
 const corsOptions = {
-    origin: ['http://localhost:5173',"https://restaurant-management-lyart.vercel.app/"],
+    origin: ['http://localhost:5173',"https://restaurant-management-lyart.vercel.app"],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
