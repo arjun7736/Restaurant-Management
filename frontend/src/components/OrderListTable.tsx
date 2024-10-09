@@ -22,6 +22,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import { Button } from "./ui/button";
+import { MdOutlinePlaylistAdd } from "react-icons/md";
+import AddOrder from "./AddOrder";
 
 const OrderListTable = () => {
   const [orderList, setOrderList] = useState<Order[]>([]);
@@ -37,10 +40,23 @@ const OrderListTable = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   return (
     <>
       <div className="bg-white p-4 rounded-lg shadow">
-        <h3 className="text-gray-600 mb-4">Order List</h3>
+        <div className="w-full flex justify-between items-center">
+          <h3 className="text-gray-600 mb-4 font-bold">Order List</h3>
+          <Button
+          onClick={toggleModal}
+            variant={"ghost"}
+            className="bg-green-300/70 text-green-500 hover:text-green-500 rounded-xl"
+          >
+            <MdOutlinePlaylistAdd size={20} className="mr-1"/> Add Order
+          </Button>
+        </div>
         <Table>
           <TableHeader>
             <TableRow>
@@ -82,7 +98,7 @@ const OrderListTable = () => {
                   <AlertDialog>
                     <TableCell>
                       {" "}
-                      <FaRegEdit size={20} />{" "}
+                      <FaRegEdit size={20}  />{" "}
                     </TableCell>
                     <TableCell>
                       <AlertDialogTrigger>
@@ -102,11 +118,12 @@ const OrderListTable = () => {
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel>Discard</AlertDialogCancel>
                         <AlertDialogAction
+                        className="bg-red-500 hover:bg-red-600 text-white"
                           onClick={() => handleDelete(order._id)}
                         >
-                          Continue
+                          Delete
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -117,6 +134,7 @@ const OrderListTable = () => {
           </TableBody>
         </Table>
       </div>
+      <AddOrder isModalOpen={isModalOpen} toggleModal={toggleModal} />
     </>
   );
 };
