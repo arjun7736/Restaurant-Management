@@ -3,13 +3,15 @@ import { AddOrder } from "../../application/useCases/addOrder";
 import { GetOrders } from "../../application/useCases/getOrders";
 import { DeleteOrder } from "../../application/useCases/deleteOrder";
 import { UpdateOrder } from "../../application/useCases/updateOrder";
+import { GetSingleData } from "../../application/useCases/getSingleData";
 
 export class OrderController {
   constructor(
     private addOrder: AddOrder,
     private getOrder: GetOrders,
     private deleteOrd: DeleteOrder,
-    private update: UpdateOrder
+    private update: UpdateOrder,
+    private singleOrder:GetSingleData
   ) {}
 
   async createOrder(req: Request, res: Response, next: NextFunction) {
@@ -45,6 +47,16 @@ export class OrderController {
       const { id } = req.params;
       const update = await this.update.execute(id, req.body);
       res.json(update)
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getSingleData(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const order = await this.singleOrder.execute(id)
+      res.json(order);
     } catch (error) {
       next(error);
     }

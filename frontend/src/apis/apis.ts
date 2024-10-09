@@ -12,8 +12,8 @@ export const fetchOrderList = async (): Promise<Order[]> => {
     });
 };
 
-export const deleteOrder = async (id:string) => {
-   await axios
+export const deleteOrder = async (id: string) => {
+  await axios
     .delete(`/order/delete-order/${id}`)
     .then((data) => {
       toast.success(data.data);
@@ -23,8 +23,7 @@ export const deleteOrder = async (id:string) => {
     });
 };
 
-
-export const createOrder=(formData: OrderForm) => {
+export const createOrder = (formData: OrderForm) => {
   return axios
     .post("/order/create-order", formData)
     .then((data) => {
@@ -35,18 +34,37 @@ export const createOrder=(formData: OrderForm) => {
     });
 };
 
+export const getSingleData = async (id: string) => {
+  return axios
+    .get(`/order/get-singleData/${id}`)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error) => {
+      toast.error(error.response.data.error.message);
+    });
+};
 
-
-export interface OrderForm {
-  name: string
-  price: number;
-  quantity: number;
-  customerName: string
-  location: string;
-  status:string
-  id?:string;
+export const updateOrder=async(id:string,data:OrderForm)=>{
+  return axios
+  .put(`/order/update-order/${id}`,data)
+  .then((data) => {
+    toast.success(data.data);
+  })
+  .catch((error) => {
+    toast.error(error.response.data.error.message);
+  });
 }
 
+export interface OrderForm {
+  name: string;
+  price: number;
+  quantity: number;
+  customerName: string;
+  location: string;
+  status: string;
+  id?: string;
+}
 
 export interface Order {
   _id: string;

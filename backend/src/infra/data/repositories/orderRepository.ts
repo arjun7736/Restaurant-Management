@@ -22,4 +22,9 @@ export class OrderRepository implements IOrderRepository {
       await OrderDB.findByIdAndUpdate(id, data);
       return "Order Updated";
   }
+
+
+ async getSingleData(id: string): Promise<Order | null> {
+    return await OrderDB.findById(id);
+  }
 }

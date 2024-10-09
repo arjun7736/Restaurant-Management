@@ -25,6 +25,7 @@ import {
 import { Button } from "./ui/button";
 import { MdOutlinePlaylistAdd } from "react-icons/md";
 import AddOrder from "./AddOrder";
+import EditOrder from "./EditOrder";
 
 const OrderListTable = () => {
   const [orderList, setOrderList] = useState<Order[]>([]);
@@ -41,8 +42,14 @@ const OrderListTable = () => {
     fetchData();
   }, []);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditOpen, setEditOpen] = useState(false);
+  const [id, setId] = useState("");
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+  };
+  const fetchId = async (id: string) => {
+    setEditOpen(!isEditOpen);
+    setId(id);
   };
   return (
     <>
@@ -108,7 +115,11 @@ const OrderListTable = () => {
                       <AlertDialog>
                         <TableCell>
                           {" "}
-                          <FaRegEdit size={20} />{" "}
+                          <FaRegEdit
+                            size={20}
+                            className="hover:cursor-pointer"
+                            onClick={() => fetchId(order._id)}
+                          />{" "}
                         </TableCell>
                         <TableCell>
                           <AlertDialogTrigger>
@@ -149,6 +160,13 @@ const OrderListTable = () => {
       <AddOrder
         isModalOpen={isModalOpen}
         toggleModal={toggleModal}
+        fetchData={fetchData}
+      />
+      <EditOrder
+        setEditOpen={setEditOpen}
+        isEditOpen={isEditOpen}
+        id={id}
+        setId={setId}
         fetchData={fetchData}
       />
     </>

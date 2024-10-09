@@ -6,4 +6,5 @@ export interface IOrderRepository{
     findAll():Promise<Order[]>
     delete(id:string):Promise<string|null>
     updateOrder(id:string,data:IOrder):Promise<string>
+    getSingleData(id:string):Promise<Order|null>
 }
