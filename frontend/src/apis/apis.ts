@@ -8,7 +8,7 @@ export const fetchOrderList = async (): Promise<Order[]> => {
       return data.data;
     })
     .catch((error) => {
-      console.log(error);
+      toast.error(error.response.data.error.message);
     });
 };
 
@@ -19,9 +19,34 @@ export const deleteOrder = async (id:string) => {
       toast.success(data.data);
     })
     .catch((error) => {
-      console.log(error);
+      toast.error(error.response.data.error.message);
     });
 };
+
+
+export const createOrder=(formData: OrderForm) => {
+  return axios
+    .post("/order/create-order", formData)
+    .then((data) => {
+      toast.success(data.data);
+    })
+    .catch((error) => {
+      toast.error(error.response.data.error.message);
+    });
+};
+
+
+
+export interface OrderForm {
+  name: string
+  price: number;
+  quantity: number;
+  customerName: string
+  location: string;
+  status:string
+  id?:string;
+}
+
 
 export interface Order {
   _id: string;
