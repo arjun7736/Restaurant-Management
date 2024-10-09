@@ -1,12 +1,12 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', 
+  baseURL: 'https://restaurant-management-msd0.onrender.com/api', 
 });
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    config.baseURL = 'http://localhost:3000/api';    
+    config.baseURL = 'https://restaurant-management-msd0.onrender.com/api';    
     return config;
   },
   (error) => {
